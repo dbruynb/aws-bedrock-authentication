@@ -1,6 +1,6 @@
-import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
+const { BedrockRuntimeClient, InvokeModelCommand } = require("@aws-sdk/client-bedrock-runtime");
 
-export default function(RED) {
+module.exports = function(RED) {
   function BedrockNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
@@ -44,14 +44,14 @@ export default function(RED) {
         let bedrockResponse;
         
         try {
-          bedockResponse = JSON.parse(text);
+          bedrockResponse = JSON.parse(text);
         } catch (parseErr) {
           node.error("Failed to parse Bedrock response: " + parseErr.message);
           node.status({ fill: "red", shape: "ring", text: "Parse error" });
           return;
         }
 
-        msg.bedrock = bedockResponse;
+        msg.bedrock = bedrockResponse;
         node.status({ fill: "green", shape: "dot", text: "success" });
         node.send(msg);
 
@@ -70,4 +70,4 @@ export default function(RED) {
   }
 
   RED.nodes.registerType("bedrock", BedrockNode);
-}
+};
